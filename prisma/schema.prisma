@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ON
+  OFF
+}
+
+model Server {
+  ip     String @id
+  name   String
+  status Status @default(OFF)
+  url    String
+
+  // Champs du Service
+  deviceId       String?
+  currentUrl     String?
+  lastHeartbeat  DateTime?
+  serviceVersion String?
+
+  // Relations
+  computerStatus ComputerStatus?
+  actions        Action[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ComputerStatus {
+  id            String   @id @default(cuid())
+  ip            String   @unique
+  uptime        String
+  cpuUsage      Float
+  memoryUsage   Float
+  isScreenOn    Boolean  @default(true)
+  isKioskMode   Boolean  @default(false)
+  lastHeartbeat DateTime @default(now())
+  timestamp     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  server Server @relation(fields: [ip], references: [ip], onDelete: Cascade)
+}
+
+model Action {
+  id         String    @id @default(cuid())
+  ip         String
+  actionId   String    @unique
+  type       String
+  parameters Json
+  priority   Int       @default(0)
+  executeAt  DateTime?
+  status     String    @default("pending")
+  createdAt  DateTime  @default(now())
+  createdBy  String?
+  executedAt DateTime?
+  updatedAt  DateTime  @updatedAt
+
+  server Server        @relation(fields: [ip], references: [ip], onDelete: Cascade)
+  result ActionResult?
+
+  @@index([ip])
+  @@index([status])
+}
+
+model ActionResult {
+  id         String   @id @default(cuid())
+  actionId   String   @unique
+  success    Boolean
+  message    String
+  executedAt DateTime @default(now())
+  data       Json?
+  createdAt  DateTime @default(now())
+
+  action Action @relation(fields: [actionId], references: [actionId], onDelete: Cascade)
+}

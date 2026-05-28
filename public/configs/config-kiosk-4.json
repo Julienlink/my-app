@@ -1,0 +1,9 @@
+{
+  "serverUrl": "http://192.168.1.100:3000",
+  "kioskUrl": "http://localhost:8080",
+  "heartbeatInterval": 10000,
+  "maxRetries": 3,
+  "retryDelay": 5000,
+  "logLevel": "Info",
+  "deviceId": "KIOSK-04"
+}
