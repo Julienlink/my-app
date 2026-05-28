@@ -52,16 +52,17 @@ export function isValidIp(ip: string): boolean {
 /**
  * Valider le format d'une chaîne JSON
  */
-export function isValidJson(obj: any): boolean {
+export function isValidJson(obj: unknown): boolean {
   return obj !== null && typeof obj === 'object';
 }
 
 /**
  * Valider les champs requis dans un objet
  */
-export function validateRequiredFields(data: any, fields: string[]): { isValid: boolean; error?: string } {
+export function validateRequiredFields(data: object, fields: string[]): { isValid: boolean; error?: string } {
+  const record = data as Record<string, unknown>;
   for (const field of fields) {
-    if (data[field] === undefined || data[field] === null || data[field] === '') {
+    if (record[field] === undefined || record[field] === null || record[field] === '') {
       return {
         isValid: false,
         error: `Champ requis manquant: ${field}`,
@@ -81,11 +82,11 @@ export function sanitizeString(str: string): string {
 /**
  * Créer une réponse d'erreur standard
  */
-export function errorResponse(message: string, status: number = 400) {
+export function errorResponse(message: string = 'Requête invalide', status: number = 400) {
   return NextResponse.json(
     {
       success: false,
-      message,
+      error: message,
       timestamp: new Date().toISOString(),
     },
     { status }
@@ -95,7 +96,7 @@ export function errorResponse(message: string, status: number = 400) {
 /**
  * Créer une réponse de succès standard
  */
-export function successResponse(data: any, status: number = 200) {
+export function successResponse(data: unknown, status: number = 200) {
   return NextResponse.json(
     {
       success: true,

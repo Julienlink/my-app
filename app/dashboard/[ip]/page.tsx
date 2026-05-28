@@ -2,10 +2,10 @@
 
 import { useServer, useWebSocket } from '@/api';
 import Link from 'next/link';
-import { useState } from 'react';
+import { use, useState } from 'react';
 
-export default function ServerDetail({ params }: { params: { ip: string } }) {
-  const ip = decodeURIComponent(params.ip);
+export default function ServerDetail({ params }: { params: Promise<{ ip: string }> }) {
+  const ip = decodeURIComponent(use(params).ip);
   const { server, isLoading, error, updateStatus, updateServer } = useServer(ip);
   const { isConnected } = useWebSocket();
   const [isUpdating, setIsUpdating] = useState(false);

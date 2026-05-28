@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function DashboardLayout({
   children,
 }: {
@@ -10,12 +12,12 @@ export default function DashboardLayout({
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-white">Serveurs Manager</h1>
             <div className="flex gap-4">
-              <a
+              <Link
                 href="/dashboard"
                 className="text-slate-300 hover:text-white transition"
               >
                 Dashboard
-              </a>
+              </Link>
             </div>
           </div>
         </div>
