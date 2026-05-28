@@ -8,11 +8,11 @@ import { validateRequest, validateRequiredFields, errorResponse, isValidIp } fro
 
 export async function GET(req: NextRequest) {
   try {
-    // Authentification optionnelle pour GET
-    const auth = validateRequest(req);
+    // Local donc authentification non nécessaire.
+    /*const auth = validateRequest(req);
     if (!auth.isValid) {
       return errorResponse(auth.error || 'Non autorisé', 401);
-    }
+    }*/
 
     const servers = await prisma.server.findMany({
       include: {
