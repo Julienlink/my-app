@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Server } from '../types';
 import { serverService } from '../services/serverService';
 
 export function useServer(ip: string | null) {
+  const router = useRouter();
   const [server, setServer] = useState<Server | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,6 +49,20 @@ export function useServer(ip: string | null) {
     return updateServer({ status });
   };
 
+  const deleteServer = async () => {
+    if (!ip) throw new Error('Pas de serveur sélectionné');
+    try {
+      await serverService.delete(ip);
+      setServer(null);
+      router.push("/dashboard");
+    } catch (err) {
+      const errorMsg =
+      err instanceof Error ? err.message : "Erreur inconnue";
+      setError(errorMsg);
+      throw err;
+    } 
+  };
+
   return {
     server,
     isLoading,
@@ -54,5 +70,6 @@ export function useServer(ip: string | null) {
     fetchServer,
     updateServer,
     updateStatus,
+    deleteServer,
   };
 }

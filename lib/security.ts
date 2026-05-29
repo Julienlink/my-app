@@ -17,7 +17,7 @@ export function validateRequest(req: NextRequest): ValidatedRequest {
   if (!apiKey || apiKey !== API_KEY) {
     return {
       isValid: false,
-      error: 'Authentification requise: fournir X-API-Key header',
+      error: 'Authentification requise: fournir X-API-Key header key: '+ apiKey,
     };
   }
 

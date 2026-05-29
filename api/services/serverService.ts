@@ -7,7 +7,7 @@ class ServerService {
 
   private getHeader(contentType: boolean = false): HeadersInit {
     const headers: HeadersInit = {
-      'x-api-key': process.env.API_KEY || '',
+      'X-API-Key': process.env.NEXT_PUBLIC_API_KEY || '',
     };
     if (contentType) {
       headers['Content-Type'] = 'application/json';
