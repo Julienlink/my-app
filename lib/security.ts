@@ -37,7 +37,7 @@ export function validateRequest(req: NextRequest): ValidatedRequest {
  */
 export function isValidIp(ip: string): boolean {
   const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
-  const localhostRegex = /^localhost$|^127\.0\.0\.1$/;
+  const localhostRegex = /^localhost$|^127\.0\.0\.1$|^::1$|^::ffff:127\.0\.0\.1$/;
   
   if (localhostRegex.test(ip)) return true;
   

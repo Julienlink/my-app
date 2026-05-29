@@ -27,12 +27,6 @@ export default function Dashboard() {
         ) : servers.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-slate-300 mb-6">Aucun serveur trouvé</p>
-            <Link
-              href="/dashboard/create"
-              className="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
-            >
-              Ajouter un serveur
-            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -79,12 +73,7 @@ export default function Dashboard() {
         )}
 
         <div className="mt-8 flex gap-4">
-          <Link
-            href="/dashboard/create"
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
-          >
-            + Ajouter un serveur
-          </Link>
+          <h3>Ajout de serveur automatique</h3>
         </div>
       </div>
     </div>

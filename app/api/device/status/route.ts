@@ -36,16 +36,26 @@ export async function POST(req: NextRequest) {
     }
     
     const body: DeviceStatusRequest = await req.json();
+    console.log("👉 [Status API] Received body:", JSON.stringify(body, null, 2));
     
     // Valider les données requises
     const validation = validateRequiredFields(body, ['deviceId', 'computerStatus', 'timestamp']);
     if (!validation.isValid) {
+      console.log("❌ [Status API] Validation failed on required fields:", validation.error);
       return errorResponse(validation.error, 400);
     }
     
     // Valider la structure de computerStatus
     if (!body.computerStatus.uptime || typeof body.computerStatus.cpuUsage !== 'number' || 
         typeof body.computerStatus.memoryUsage !== 'number') {
+      console.log("❌ [Status API] Validation failed on computerStatus properties:", {
+        uptime: body.computerStatus.uptime,
+        cpuUsage: body.computerStatus.cpuUsage,
+        memoryUsage: body.computerStatus.memoryUsage,
+        uptimeType: typeof body.computerStatus.uptime,
+        cpuUsageType: typeof body.computerStatus.cpuUsage,
+        memoryUsageType: typeof body.computerStatus.memoryUsage
+      });
       return errorResponse('Format computerStatus invalide', 400);
     }
     

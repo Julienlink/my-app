@@ -1,25 +1,41 @@
-'use client';
 
-import { useServer, useWebSocket } from '@/api';
-import Link from 'next/link';
-import { useState } from 'react';
+"use client";
 
-export default function ServerDetail({ params }: { params: { ip: string } }) {
-  const ip = decodeURIComponent(params.ip);
-  const { server, isLoading, error, updateStatus, updateServer } = useServer(ip);
+import { useState } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
+import { useServer } from "@/api";
+import { useWebSocket } from "@/api";
+
+export default function ServerDetail() {
+  const params = useParams();
+
+  const ip = decodeURIComponent(params.ip as string);
+
+  const { server, isLoading, error, updateStatus, updateServer } =
+    useServer(ip);
+
   const { isConnected } = useWebSocket();
+
   const [isUpdating, setIsUpdating] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState({ name: '', url: '' });
+
+  const [editData, setEditData] = useState({
+    name: "",
+    url: "",
+  });
 
   const handleStatusToggle = async () => {
     if (!server) return;
+
     setIsUpdating(true);
+
     try {
-      const newStatus = server.status === 'ON' ? 'OFF' : 'ON';
+      const newStatus = server.status === "ON" ? "OFF" : "ON";
       await updateStatus(newStatus);
     } catch (err) {
-      console.error('Erreur lors du changement de status:', err);
+      console.error("Erreur lors du changement de status:", err);
     } finally {
       setIsUpdating(false);
     }
@@ -27,22 +43,31 @@ export default function ServerDetail({ params }: { params: { ip: string } }) {
 
   const handleUpdate = async () => {
     setIsUpdating(true);
+
     try {
       await updateServer({
         ...(editData.name && { name: editData.name }),
         ...(editData.url && { url: editData.url }),
       });
+
       setEditMode(false);
-      setEditData({ name: '', url: '' });
+
+      setEditData({
+        name: "",
+        url: "",
+      });
     } catch (err) {
-      console.error('Erreur lors de la mise à jour:', err);
+      console.error("Erreur lors de la mise à jour:", err);
     } finally {
       setIsUpdating(false);
     }
   };
 
   const handleEditChange = (field: string, value: string) => {
-    setEditData((prev) => ({ ...prev, [field]: value }));
+    setEditData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   return (
