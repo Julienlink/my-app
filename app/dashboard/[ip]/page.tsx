@@ -5,8 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { useServer } from "@/api";
-import { useWebSocket } from "@/api";
+import { useServer } from "@/api/hooks/useServer";
+import { useWebSocket } from "@/api/hooks/useWebSocket";
 
 export default function ServerDetail() {
   const params = useParams();
