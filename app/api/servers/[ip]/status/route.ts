@@ -5,7 +5,7 @@ import { validateRequest, validateRequiredFields, errorResponse, isValidIp } fro
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { ip: string } }
+  { params }: { params: Promise<{ ip: string }> }
 ) {
   try {
     // Authentification
@@ -14,7 +14,7 @@ export async function PATCH(
       return errorResponse(auth.error || 'Non autorisé', 401);
     }
 
-    const ip = decodeURIComponent(params.ip);
+    const ip = decodeURIComponent((await params).ip);
 
     // Valider l'IP
     if (!isValidIp(ip)) {

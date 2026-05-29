@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 export default function CreateServer() {
   const router = useRouter();
-  const { createServer, isLoading, error } = useServers({ autoFetch: false });
+  const { createServer, error } = useServers({ autoFetch: false });
   const [isCreating, setIsCreating] = useState(false);
   const [formError, setFormError] = useState('');
   const [formData, setFormData] = useState({

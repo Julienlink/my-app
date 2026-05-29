@@ -2,6 +2,7 @@ export const runtime = 'nodejs';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { validateRequest, validateRequiredFields, errorResponse } from '@/lib/security';
 
 interface ActionResultRequest {
@@ -9,7 +10,7 @@ interface ActionResultRequest {
   success: boolean;
   message: string;
   executedAt: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 export async function POST(req: NextRequest) {
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
         success: body.success,
         message: body.message,
         executedAt: new Date(body.executedAt),
-        data: body.data || {},
+        data: (body.data ?? {}) as Prisma.InputJsonValue,
       },
     });
     

@@ -6,14 +6,9 @@ import { validateRequest, validateRequiredFields, errorResponse, isValidIp } fro
 
 
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    // Local donc authentification non nécessaire.
-    /*const auth = validateRequest(req);
-    if (!auth.isValid) {
-      return errorResponse(auth.error || 'Non autorisé', 401);
-    }*/
-
+    // GET /api/servers est public (lecture seule pour le dashboard, accès local)
     const servers = await prisma.server.findMany({
       include: {
         computerStatus: true,

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { validateRequest, errorResponse, isValidIp } from '@/lib/security';
 
-export async function GET(req: NextRequest, { params }: { params: { ip: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ ip: string }> }) {
   try {
     // Authentification
     const auth = validateRequest(req);
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest, { params }: { params: { ip: string }
       return errorResponse(auth.error || 'Non autorisé', 401);
     }
 
-    const ip = decodeURIComponent(params.ip);
+    const ip = decodeURIComponent((await params).ip);
     
     // Valider l'IP
     if (!isValidIp(ip)) {
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest, { params }: { params: { ip: string }
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { ip: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ ip: string }> }) {
   try {
     // Authentification
     const auth = validateRequest(req);
@@ -58,7 +58,7 @@ export async function PUT(req: NextRequest, { params }: { params: { ip: string }
       return errorResponse(auth.error || 'Non autorisé', 401);
     }
 
-    const ip = decodeURIComponent(params.ip);
+    const ip = decodeURIComponent((await params).ip);
 
     // Valider l'IP
     if (!isValidIp(ip)) {
@@ -108,7 +108,7 @@ export async function PUT(req: NextRequest, { params }: { params: { ip: string }
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { ip: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ ip: string }> }) {
   try {
     // Authentification
     const auth = validateRequest(req);
@@ -116,7 +116,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { ip: strin
       return errorResponse(auth.error || 'Non autorisé', 401);
     }
 
-    const ip = decodeURIComponent(params.ip);
+    const ip = decodeURIComponent((await params).ip);
 
     // Valider l'IP
     if (!isValidIp(ip)) {
